@@ -302,8 +302,10 @@ class VideoColorizer:
                 color_image.save(str(colorframes_folder / img))
 
     def _build_video(self, source_path: Path) -> Path:
+        source_ext = source_path.suffix
+        colorized_ext = '.mp4'
         colorized_path = self.result_folder / (
-            source_path.name.replace('.mp4', '_no_audio.mp4')
+            source_path.name.replace(source_ext, '_color_no_audio' + colorized_ext)
         )
         colorframes_folder = self.colorframes_root / (source_path.stem)
         colorframes_path_template = str(colorframes_folder / '%5d.jpg')
@@ -339,7 +341,7 @@ class VideoColorizer:
         shutil.copyfile(str(colorized_path), str(result_path))
 
         # adding back sound here
-        audio_file = Path(str(source_path).replace('.mp4', '.aac'))
+        audio_file = Path(str(source_path).replace(source_ext, '.aac'))
         if audio_file.exists():
             audio_file.unlink()
 
